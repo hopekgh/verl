@@ -25,12 +25,17 @@ def extract_solution(solution_str, method='strict'):
     assert method in ['strict', 'flexible']
 
     if method == 'strict':
+        #if there is no [end] in the solution, return None
+        if "[end]" not in solution_str:
+            return None
+        
         # this also tests the formatting of the model #     solution = re.search("\\[end\\](.*?)\\[end\\]", solution_str)
         solution = re.search("\\[end\\](.*?)\\[end\\]", solution_str)
         if solution is None:
             final_answer = None
         else:
-            final_answer = solution.group(1)
+            final_answer = solution.group(0)
+            final_answer = final_answer.split('[end]')[1]
     elif method == 'flexible':
         answer = re.findall("(\\-?[0-9\\.\\,]+)", solution_str)
         final_answer = None
@@ -45,6 +50,8 @@ def extract_solution(solution_str, method='strict'):
                     break
     return final_answer
 
+def normalize_string(text):
+    return text.lower().strip()
 
 def compute_score(solution_str, ground_truth, method='strict', format_score=0.1, score=1.1, partial_score=0.5):
     """The scoring function for GSM8k.
@@ -57,11 +64,16 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
         score: the score for the correct answer
         partial_score: score awarded if ground truth is contained in answer
     """
+    
+
     answer = extract_solution(solution_str=solution_str, method=method)
+    normalized_answer = normalize_string(answer)
+    normalized_truth = normalize_string(ground_truth)
+    is_correct = normalized_answer == normalized_truth
     if answer is None:
         return 0
     else:
-        if answer == ground_truth:
+        if is_correct:
             return score
         elif str(ground_truth) in str(answer):
             return partial_score
