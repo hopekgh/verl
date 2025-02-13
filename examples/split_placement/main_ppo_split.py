@@ -26,6 +26,8 @@ def _select_rm_score_fn(data_source):
         return gsm8k.compute_score
     elif data_source == 'lighteval/MATH':
         return math.compute_score
+    elif data_source == 'HanyangMed/questions_dataset':
+        return medqa.compute_score
     else:
         raise NotImplementedError
 
