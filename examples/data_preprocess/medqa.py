@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     data_source = 'HanyangMed/questions_dataset'
 
-    dataset = datasets.load_dataset(data_source, 'main')
+    dataset = datasets.load_dataset(data_source, 'default')
 
     train_dataset = dataset['train']
     test_dataset = dataset['test']
@@ -56,7 +56,7 @@ if __name__ == '__main__':
             question = question_raw + ' ' + instruction_following
 
             answer_raw = example.pop('answer')
-            answer = answer_raw
+            solution = answer_raw
             data = {
                 "data_source": data_source,
                 "prompt": [{
