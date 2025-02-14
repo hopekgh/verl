@@ -14,15 +14,19 @@
 
 import re
 import random
+from transformers.utils import logging
 # def extract_solution(solution_str):
 #     #find the solution in the string between [end] and [end]
 #     solution = re.search("\\[end\\](.*?)\\[end\\]", solution_str)
 #     assert solution is not None
 #     final_solution = solution.group(0)
 #     return final_solution
+logger = logging.get_logger(__name__)
 
 def extract_solution(solution_str, method='strict'):
     assert method in ['strict', 'flexible']
+    #only look at the solution after "<|im_start|>assistant"
+    solution_str = solution_str.split("<|im_start|>assistant")[1]
 
     if method == 'strict':
         #if there is no [end] in the solution, return None
@@ -66,16 +70,20 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
     """
     # random between 0 to 64 int and if it is 0, do print
     do_print = random.randint(0, 32) == 0
-
+    if do_print:
+        print(f"Solution: {solution_str}, Ground Truth: {ground_truth}")
     answer = extract_solution(solution_str=solution_str, method=method)
+    if answer is None:
+        final_score = 0.0
+        return final_score
     normalized_answer = normalize_string(answer)
     normalized_truth = normalize_string(ground_truth)
     is_correct = normalized_answer == normalized_truth
     final_score = 0.0
     if do_print:
+        
         print(f"Answer: {normalized_answer}, Ground Truth: {normalized_truth}, Is Correct: {is_correct}")
-    if answer is None:
-        final_score = 0.0
+        #logger.info(f"Answer: {normalized_answer}, Ground Truth: {normalized_truth}, Is Correct: {is_correct}")
     else:
         if is_correct:
             final_score = score
@@ -86,4 +94,5 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
     
     if do_print:
         print(f"Final Score: {final_score}")
+        #logger.info(f"Final Score: {final_score}")
     return final_score
