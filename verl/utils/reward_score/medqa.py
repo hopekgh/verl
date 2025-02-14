@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import re
-
+import random
 # def extract_solution(solution_str):
 #     #find the solution in the string between [end] and [end]
 #     solution = re.search("\\[end\\](.*?)\\[end\\]", solution_str)
@@ -64,18 +64,26 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
         score: the score for the correct answer
         partial_score: score awarded if ground truth is contained in answer
     """
-    
+    # random between 0 to 64 int and if it is 0, do print
+    do_print = random.randint(0, 32) == 0
 
     answer = extract_solution(solution_str=solution_str, method=method)
     normalized_answer = normalize_string(answer)
     normalized_truth = normalize_string(ground_truth)
     is_correct = normalized_answer == normalized_truth
+    final_score = 0.0
+    if do_print:
+        print(f"Answer: {normalized_answer}, Ground Truth: {normalized_truth}, Is Correct: {is_correct}")
     if answer is None:
-        return 0
+        final_score = 0.0
     else:
         if is_correct:
-            return score
+            final_score = score
         elif str(ground_truth) in str(answer):
-            return partial_score
+            final_score = partial_score
         else:
-            return format_score
+            final_score = format_score
+    
+    if do_print:
+        print(f"Final Score: {final_score}")
+    return final_score
