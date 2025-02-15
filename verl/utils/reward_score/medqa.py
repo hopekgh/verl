@@ -87,12 +87,12 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
         
         print(f"Answer: {normalized_answer}, Ground Truth: {normalized_truth}, Is Correct: {is_correct}")
         #logger.info(f"Answer: {normalized_answer}, Ground Truth: {normalized_truth}, Is Correct: {is_correct}")
-    else:
-        if is_correct:
+    
+    if is_correct:
             final_score = score
-        elif str(ground_truth) in str(answer):
+    elif str(ground_truth) in str(answer):
             final_score = partial_score
-        else:
+    else:
             final_score = format_score
     if check_too_many_end(solution_str):
         final_score = final_score - format_score
