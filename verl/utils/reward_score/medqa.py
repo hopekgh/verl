@@ -54,6 +54,9 @@ def extract_solution(solution_str, method='strict'):
                     break
     return final_answer
 
+def check_too_many_end(solution_str):
+    return solution_str.count("[end]") > 5
+
 def normalize_string(text):
     return text.lower().strip()
 
@@ -91,7 +94,8 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
             final_score = partial_score
         else:
             final_score = format_score
-    
+    if check_too_many_end(solution_str):
+        final_score = final_score - format_score
     if do_print:
         print(f"Final Score: {final_score}")
         #logger.info(f"Final Score: {final_score}")
