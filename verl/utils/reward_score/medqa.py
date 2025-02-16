@@ -57,6 +57,11 @@ def extract_solution(solution_str, method='strict'):
 def check_too_many_end(solution_str):
     return solution_str.count("[end]") > 5
 
+def check_is_correct(answer, ground_truth):
+    # 하나가 다른 하나를 포함하고 있는지 확인
+    return ground_truth in answer or answer in ground_truth
+    
+
 def normalize_string(text):
     return text.lower().strip()
 
@@ -81,7 +86,7 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
         return final_score
     normalized_answer = normalize_string(answer)
     normalized_truth = normalize_string(ground_truth)
-    is_correct = normalized_answer == normalized_truth
+    is_correct = check_is_correct(normalized_answer, normalized_truth)
     final_score = 0.0
     if do_print:
         
@@ -90,8 +95,6 @@ def compute_score(solution_str, ground_truth, method='strict', format_score=0.1,
     
     if is_correct:
             final_score = score
-    elif str(ground_truth) in str(answer):
-            final_score = partial_score
     else:
             final_score = format_score
     if check_too_many_end(solution_str):
