@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    data_source = 'HanyangMed/final_diagnosis_medqa'
+    data_source = 'HanyangMed/final_diagnosis_medqa_after'
 
     dataset = datasets.load_dataset(data_source, 'default')
 
