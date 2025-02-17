@@ -45,7 +45,7 @@ if __name__ == '__main__':
     train_dataset = dataset['train']
     test_dataset = dataset['test']
 
-    instruction_following = "You are an medical AI that thinks by mimicking real medical process. Let's think step by step and output the final answer between [end] and [end]. Use exactly same words and language given in Options. English, Chinese or Taiwanese"
+    instruction_following = "You are an medical AI that thinks by mimicking real medical process. Let's think step by step and output the final answer between [end] and [end]."
 
     # add a row to each data item that represents a unique id
     def make_map_fn(split):
